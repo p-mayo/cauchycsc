@@ -11,24 +11,36 @@ In representation learning, Convolutional Sparse Coding (CSC) enables unsupervis
 ## Implementation
 The code has been implemented in Python and requires the following libraries to run:
 
-* Pytorch
+* Autograd
 * Numpy
 * Matplotlib
 * SciKit
 * SciPy
+* SparselandTools
 
 
 ## How to run
-To execute the program, you need to open a terminal where the code is located in your machine (**cd cauchycsc_dir**)
+To execute the program, you need to open a terminal where the code is located in your machine. The main code to test for a given dataset is under the folder csctesting, the file to run is **csc_thresholding.py**, and an example to run it is shown next:
 
-    python run_task.py -xml xml_path [-s seed] [-d seed]
+    python -m csctesting.csc_thresholding -dp dataset_path  -bp output_path [-pr prior]
 
-The **required** arguments are:
+The full list of available arguments and their default values (if none is given), is shown in the table below.
 
- - xml_path The path of the XML containing all the settings for the execution. Examples of this XML file can be found in [architectures](architectures)
+|Parameter|Description|Default value|
+|----------|--------|----------|
+|-dp --datasetpath | Path of the folder containing the images. It also takes the option "mnist" | * |
+| -bp --basepath| Path to save the outputs| * |
+| -ns --numsamples | Number of samples to use from the dataset. Value 0 uses all the data available | 0 |
+| -nf --numfilters | Number of filters or atoms to learn | 64 |
+|-fs --filtersize | Size of the filter. For dimensions greater than 1, this is the size of one side of the filter | 7 |
+| --fx --fixed | Whether the program should learn the filters or not. If a string is given, it is assumed no learning is required and it will attempt to load a set of filters from the path specified. For the value of 1 means no learning, value of 2 requires the learning and initialises the filters from random. Any other value initialises the filters from the DCT and requires learning. | 3 |
+| -pr --prior | The prior that models the distribution of the coefficients. Possible values: Cauchy, Laplace, Hard, Log | cauchy |
+|-lm --lambda| Regularisation parameter | 1|
+|-pm --param | Parameter associated to the encoding algorithm (gamma for Cauchy and delta for Log). A value of 0 estimates gamma if the prior is Cauchy and sets delta to 0.001 for Log | 0|
+|-lrd --learningrated | Learning rate for the filters | 0.2|
+|-lrz --learningratez | Learning rate for the coefficients | 0.015 |
+|-mi --maxinner | Maximum number of iterations for the inner steps | 30 |
+|-mo --maxouter | Maximum number of iterations for the whole algorithm | 10 |
+|-sd --seed| Seed for random value generation. A value of 0 draws a random seed. | 0|
 
-The **optional** arguments are:
-- *seed* An initial seed to use. If none is specified, a random seed will be in place
-- *dimension* The dimension of the input data to work with. This is not ideal and can be improved, but at this point this is still required
-
-More details on the execution to come...
+* These parameters are required.
