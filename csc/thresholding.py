@@ -2,7 +2,7 @@
 from autograd import numpy as np
 from numpy.linalg import norm
 
-from utils import math as mh
+from helpers import math_helpers as mh
 
 # Soft Thresholding
 def soft(x, th, portion=1.):
@@ -212,11 +212,7 @@ def get_cauchy_th(gamma, lmbda):
 			return th2**.5
 	return 0.
 
-def shrink_curve(x, curve):
-	approximation = interp1d(curve[0], curve[1], kind='cubic')
-	return approximation(x)
-
-def shrink(x, opt, params, curve=None):
+def shrink(x, opt, params):
 	prox = np.zeros(x.shape)
 	if opt == "laplace":
 		prox = soft(x, th = params["lmbda"], portion = params["portion"])
@@ -234,8 +230,5 @@ def shrink(x, opt, params, curve=None):
 		prox = log(x, lmbda= params["lmbda"], delta= params["delta"])
 	elif opt == "cauchy":
 		#print(opt)
-		if curve:
-			return curve(x)
-		else:
-			prox = cauchy(x, lmbda= params["lmbda"], gamma= params["gamma"], hard = params["hard"])
+		prox = cauchy(x, lmbda= params["lmbda"], gamma= params["gamma"], hard = params["hard"])
 	return prox
